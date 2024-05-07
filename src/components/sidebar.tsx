@@ -65,7 +65,9 @@ export default function Side({ children }: SideProps) {
             <RiArrowLeftCircleLine size={36} onClick={() => setfirst(true)} />
           )}
         </div>
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full mt-12">
+          {" "}
+          {/*flex justify-center items-center */}
           {children}
         </div>
       </div>
