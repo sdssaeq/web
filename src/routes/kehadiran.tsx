@@ -1,43 +1,34 @@
 import Side from "../components/sidebar";
+import { useEffect, useState } from "react";
+import * as Realm from "realm-web";
+const APP_ID = "data-wzvck";
+const app = new Realm.App({ id: APP_ID });
+const credentials = Realm.Credentials.apiKey(
+  "r7WRET3thOH7CXWdLzJCnxyPvYznPZFrbjZeN1PW2QPfzcbLIL3RXXFlbP3mM0eO"
+);
+
+interface KehadiranRecord {
+  nama: string;
+  tdk_hadir: number;
+  hadir: number;
+}
 
 export default function Kehadiran() {
+  const [kehadiranData, setKehadiranData] = useState<KehadiranRecord[]>([]);
+  useEffect(() => {
+    const login = async () => {
+      const user = await app.logIn(credentials);
+      const mongo = await user.mongoClient("Cluster0");
+      const collection = await mongo.db("iot").collection("kehadiran");
+      const findKehadiran = await collection.find({});
+      // console.log(findKehadiran);
+      setKehadiranData(findKehadiran);
+    };
+    login();
+  }, []);
   return (
     <>
       <Side>
-        {/* <div className="h-full grid grid-cols-4 gap-4 content-center place-items-center pb-52">
-          <div>1</div>
-          <div>2</div>
-          <div>3</div>
-          <div>4</div>
-          <div>5</div>
-          <div>6</div>
-          <div>7</div>
-          <div>8</div>
-        </div> */}
-        {/* <div className="h-full pb-52 flex justify-center items-center max-md:text-xs">
-          <table className="table-auto text-center outline outline-offset-8 border-spacing-2">
-            <thead>
-              <tr>
-                <th>Nama</th>
-                <th>Total Absensi</th>
-                <th>Total Tidak Masuk</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Ardi</td>
-                <td>1</td>
-                <td>0</td>
-              </tr>
-              <tr>
-                <td>Salsa</td>
-                <td>1</td>
-                <td>0</td>
-              </tr>
-            </tbody>
-          </table>
-        </div> */}
-        {/* <!-- component --> */}
         <div className="max-md:text-xs pb-48 flex flex-col justify-center h-full">
           <div className="max-md:w-[80dvw] w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
             <header className="px-5 py-4 border-b border-gray-100">
@@ -62,84 +53,25 @@ export default function Kehadiran() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    <tr>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                            <img
-                              className="rounded-full"
-                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
-                              width="40"
-                              height="40"
-                              alt="Alex Shatov"
-                            />
+                    {kehadiranData.map((record, index) => (
+                      <tr key={index}>
+                        <td className="p-2 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="font-medium text-gray-800">
+                              {record.nama}
+                            </div>
                           </div>
-                          <div className="font-medium text-gray-800">
-                            Alex Shatov
+                        </td>
+                        <td className="p-2 whitespace-nowrap text-red-500">
+                          <div className="text-left">{record.tdk_hadir}</div>
+                        </td>
+                        <td className="p-2 whitespace-nowrap">
+                          <div className="text-left font-medium text-green-500">
+                            {record.hadir}
                           </div>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap text-red-500">
-                        <div className="text-left">0</div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-left font-medium text-green-500">
-                          1
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                            <img
-                              className="rounded-full"
-                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-06.jpg"
-                              width="40"
-                              height="40"
-                              alt="Philip Harbach"
-                            />
-                          </div>
-                          <div className="font-medium text-gray-800">
-                            Philip Harbach
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap text-red-500">
-                        <div className="text-left">0</div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-left font-medium text-green-500">
-                          1
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                            <img
-                              className="rounded-full"
-                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-07.jpg"
-                              width="40"
-                              height="40"
-                              alt="Mirko Fisuk"
-                            />
-                          </div>
-                          <div className="font-medium text-gray-800">
-                            Mirko Fisuk
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap text-red-500">
-                        <div className="text-left">0</div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-left font-medium text-green-500">
-                          1
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -149,4 +81,16 @@ export default function Kehadiran() {
       </Side>
     </>
   );
+}
+
+{
+  /* <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                            <img
+                              className="rounded-full"
+                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
+                              width="40"
+                              height="40"
+                              alt="Alex Shatov"
+                            />
+                          </div> */
 }

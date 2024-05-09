@@ -1,22 +1,255 @@
+// import Side from "../components/sidebar";
+// import { useEffect, useState } from "react";
+// import * as Realm from "realm-web";
+
+// const APP_ID = "data-wzvck";
+// const app = new Realm.App({ id: APP_ID });
+// const credentials = Realm.Credentials.apiKey(
+//   "r7WRET3thOH7CXWdLzJCnxyPvYznPZFrbjZeN1PW2QPfzcbLIL3RXXFlbP3mM0eO"
+// );
+
+// interface RiwayatRecord {
+//   _id: string;
+//   nama: string;
+//   gambar: string;
+//   tanggal: Date;
+// }
+
+// export default function RiwayatAbsen() {
+//   const [AbsenData, setAbsenData] = useState<RiwayatRecord[]>([]);
+
+//   useEffect(() => {
+//     const login = async () => {
+//       const user = await app.logIn(credentials);
+//       const mongo = await user.mongoClient("Cluster0");
+//       const collection = await mongo.db("iot").collection("absensi");
+//       const findAll = await collection.find({});
+//       // console.log(findAll[0].gambar);
+//       setAbsenData(findAll);
+//     };
+//     login();
+//   }, []);
+
+//   return (
+//     <>
+//       <Side>
+//         <div className="max-md:text-xs text-base pb-12 flex flex-col justify-center h-full">
+//           <div className="max-md:w-[90dvw] w-[100dvw] max-md:h-[80dvh] max-lg:h-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 overflow-y-scroll">
+//             <header className="px-5 py-4 border-b border-gray-100">
+//               <h2 className="font-semibold text-gray-800">Riwayat</h2>
+//             </header>
+//             <div className="p-3">
+//               <div className="overflow-x-auto">
+//                 <table className="table-auto w-full">
+//                   <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+//                     <tr>
+//                       <th className="p-2 whitespace-nowrap">
+//                         <div className="font-semibold text-left">Gambar</div>
+//                       </th>
+//                       <th className="p-2 whitespace-nowrap">
+//                         <div className="font-semibold text-left">Name</div>
+//                       </th>
+//                       <th className="p-2 whitespace-nowrap">
+//                         <div className="font-semibold text-center">Status</div>
+//                       </th>
+//                       <th className="p-2 whitespace-nowrap">
+//                         <div className="font-semibold text-center">Waktu</div>
+//                       </th>
+//                       <th className="p-2 whitespace-nowrap">
+//                         <div className="font-semibold text-center">Tanggal</div>
+//                       </th>
+//                     </tr>
+//                   </thead>
+//                   <tbody className="divide-y divide-gray-100">
+//                     {AbsenData.map((record, index) => (
+//                       <tr key={index}>
+//                         <td className="p-2 whitespace-nowrap">
+//                           <img
+//                             className="w-40"
+//                             src={`data:image/webp;base64,${record.gambar}`}
+//                             alt={record.nama}
+//                           />
+//                         </td>
+//                         <td className="p-2 whitespace-nowrap">
+//                           <div className="flex items-center">
+//                             <div className="font-medium text-gray-800">
+//                               {record.nama}
+//                             </div>
+//                           </div>
+//                         </td>
+//                         <td className="p-2 whitespace-nowrap">
+//                           <div
+//                             className={`text-center ${
+//                               new Date(record.tanggal).getHours() < 7 ||
+//                               (new Date(record.tanggal).getHours() === 7 &&
+//                                 new Date(record.tanggal).getMinutes() < 40)
+//                                 ? "text-green-500"
+//                                 : "text-red-500"
+//                             }`}
+//                           >
+//                             <p>
+//                               {new Date(record.tanggal).getHours() < 7 ||
+//                               (new Date(record.tanggal).getHours() === 7 &&
+//                                 new Date(record.tanggal).getMinutes() < 40)
+//                                 ? "Tepat Waktu"
+//                                 : "Telat"}
+//                             </p>
+//                           </div>
+//                         </td>
+//                         <td className="p-2 whitespace-nowrap">
+//                           <div
+//                             className={`text-center ${
+//                               new Date(record.tanggal).getHours() < 7 ||
+//                               (new Date(record.tanggal).getHours() === 7 &&
+//                                 new Date(record.tanggal).getMinutes() < 40)
+//                                 ? "text-green-500"
+//                                 : "text-red-500"
+//                             }`}
+//                           >
+//                             <p>
+//                               {new Date(record.tanggal).toLocaleTimeString(
+//                                 "en-US",
+//                                 { hour12: false }
+//                               )}
+//                             </p>
+//                           </div>
+//                         </td>
+//                         <td className="p-2 whitespace-nowrap">
+//                           <div className="text-center">
+//                             <p>
+//                               {new Date(record.tanggal).toLocaleDateString()}
+//                             </p>
+//                           </div>
+//                         </td>
+//                       </tr>
+//                     ))}
+//                   </tbody>
+//                 </table>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </Side>
+//     </>
+//   );
+// }
+import { useEffect, useState } from "react";
+import * as Realm from "realm-web";
 import Side from "../components/sidebar";
+import { RiSearch2Line } from "@remixicon/react";
+const APP_ID = "data-wzvck";
+const app = new Realm.App({ id: APP_ID });
+const credentials = Realm.Credentials.apiKey(
+  "r7WRET3thOH7CXWdLzJCnxyPvYznPZFrbjZeN1PW2QPfzcbLIL3RXXFlbP3mM0eO"
+);
+
+interface RiwayatRecord {
+  _id: string;
+  nama: string;
+  gambar: string;
+  tanggal: Date;
+}
 
 export default function RiwayatAbsen() {
+  const [AbsenData, setAbsenData] = useState<RiwayatRecord[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [searchResult, setSearchResult] = useState<RiwayatRecord[]>([]);
+  const [searchName, setSearchName] = useState<string>("");
+
+  useEffect(() => {
+    const login = async () => {
+      const user = await app.logIn(credentials);
+      const mongo = await user.mongoClient("Cluster0");
+      const collection = await mongo.db("iot").collection("absensi");
+      const findAll = await collection.find({});
+      setAbsenData(findAll);
+    };
+    login();
+  }, []);
+
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+  };
+
+  const handleSearch = () => {
+    if (selectedDate) {
+      const result = AbsenData.filter((record) => {
+        const recordDate = new Date(record.tanggal);
+        return (
+          recordDate.getFullYear() === selectedDate.getFullYear() &&
+          recordDate.getMonth() === selectedDate.getMonth() &&
+          recordDate.getDate() === selectedDate.getDate()
+        );
+      });
+      setSearchResult(result);
+    }
+  };
+
+  const handleNameSearch = () => {
+    if (searchName) {
+      const result = AbsenData.filter((record) => {
+        // Check if the name matches at least three characters
+        const matchCount = record.nama
+          .toLowerCase()
+          .split("")
+          .filter(
+            (char, index) => searchName.toLowerCase()[index] === char
+          ).length;
+        return matchCount >= 3;
+      });
+      setSearchResult(result);
+    }
+  };
+
   return (
     <>
-      {/* kalo lewat 7.40 maka telat */}
       <Side>
-        <div className="max-md:text-xs pb-48 flex flex-col justify-center h-full">
-          <div className="max-md:w-[80dvw] w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
+        <div className="max-md:text-xs text-base pb-12 flex flex-col justify-center h-full">
+          <div className="max-md:w-[90dvw] w-[100dvw] max-md:h-[80dvh] max-lg:h-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 overflow-y-scroll">
             <header className="px-5 py-4 border-b border-gray-100">
               <h2 className="font-semibold text-gray-800">Riwayat</h2>
             </header>
             <div className="p-3">
+              <div className="flex items-center justify-end space-x-4 mb-4">
+                <input
+                  type="date"
+                  onChange={(e) => handleDateClick(new Date(e.target.value))}
+                />
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={handleSearch}
+                >
+                  <div className="flex flex-row gap-2">
+                    Tanggal <span>{<RiSearch2Line />}</span>
+                  </div>
+                </button>
+                <input
+                  type="text"
+                  placeholder="Cari Nama"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                />
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  onClick={handleNameSearch}
+                >
+                  <div className="flex flex-row gap-2">
+                    Nama <span>{<RiSearch2Line />}</span>
+                  </div>
+                </button>
+              </div>
               <div className="overflow-x-auto">
                 <table className="table-auto w-full">
                   <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
                     <tr>
                       <th className="p-2 whitespace-nowrap">
+                        <div className="font-semibold text-left">Gambar</div>
+                      </th>
+                      <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-left">Name</div>
+                      </th>
+                      <th className="p-2 whitespace-nowrap">
+                        <div className="font-semibold text-center">Status</div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-center">Waktu</div>
@@ -27,90 +260,78 @@ export default function RiwayatAbsen() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    <tr>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                    {selectedDate && searchResult.length === 0 ? (
+                      <tr>
+                        <td className="p-2 whitespace-nowrap">
+                          No data found for {selectedDate.getDate()}/
+                          {selectedDate.getMonth() + 1}/
+                          {selectedDate.getFullYear()}
+                        </td>
+                      </tr>
+                    ) : (
+                      searchResult.map((record, index) => (
+                        <tr key={index}>
+                          <td className="p-2 whitespace-nowrap">
                             <img
-                              className="rounded-full"
-                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-05.jpg"
-                              width="40"
-                              height="40"
-                              alt="Alex Shatov"
+                              className="w-40"
+                              src={`data:image/webp;base64,${record.gambar}`}
+                              alt={record.nama}
                             />
-                          </div>
-                          <div className="font-medium text-gray-800">
-                            Alex Shatov
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">
-                          <p className="text-green-500">7:41</p>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">
-                          <p>07/05/2024</p>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                            <img
-                              className="rounded-full"
-                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-06.jpg"
-                              width="40"
-                              height="40"
-                              alt="Philip Harbach"
-                            />
-                          </div>
-                          <div className="font-medium text-gray-800">
-                            Philip Harbach
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">
-                          <p className="text-green-500">7:31</p>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">
-                          <p>07/05/2024</p>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                            <img
-                              className="rounded-full"
-                              src="https://raw.githubusercontent.com/cruip/vuejs-admin-dashboard-template/main/src/images/user-36-07.jpg"
-                              width="40"
-                              height="40"
-                              alt="Mirko Fisuk"
-                            />
-                          </div>
-                          <div className="font-medium text-gray-800">
-                            Mirko Fisuk
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">
-                          <p className="text-green-500">7:21</p>
-                        </div>
-                      </td>
-                      <td className="p-2 whitespace-nowrap">
-                        <div className="text-lg text-center">
-                          <p>07/05/2024</p>
-                        </div>
-                      </td>
-                    </tr>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="font-medium text-gray-800">
+                                {record.nama}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div
+                              className={`text-center ${
+                                new Date(record.tanggal).getHours() < 7 ||
+                                (new Date(record.tanggal).getHours() === 7 &&
+                                  new Date(record.tanggal).getMinutes() < 40)
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              <p>
+                                {new Date(record.tanggal).getHours() < 7 ||
+                                (new Date(record.tanggal).getHours() === 7 &&
+                                  new Date(record.tanggal).getMinutes() < 40)
+                                  ? "Tepat Waktu"
+                                  : "Telat"}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div
+                              className={`text-center ${
+                                new Date(record.tanggal).getHours() < 7 ||
+                                (new Date(record.tanggal).getHours() === 7 &&
+                                  new Date(record.tanggal).getMinutes() < 40)
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              <p>
+                                {new Date(record.tanggal).toLocaleTimeString(
+                                  "en-US",
+                                  { hour12: false }
+                                )}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="text-center">
+                              <p>
+                                {new Date(record.tanggal).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
