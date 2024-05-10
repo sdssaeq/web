@@ -62,7 +62,7 @@ export default function AbsenManual() {
   return (
     <>
       <Side>
-        <div className="pt-16 max-md:text-xs text-base gap-10">
+        <div className="pt-16 lg:pt-0 max-md:text-xs text-base gap-10">
           {/* <div className="flex justify-center items-center bg-red-500 max-md:pr-6 pt-20"> */}
           {/* className="max-md:text-xs text-base h-[70dvh] max-md:w-[80dvw] rounded-lg border border-gray-200 p-4" */}
           {/* <div className="max-md:text-xs text-base h-[70dvh] max-md:w-[80dvw] rounded-lg border border-gray-200 p-4"> */}
