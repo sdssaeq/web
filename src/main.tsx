@@ -7,6 +7,7 @@ import Kehadiran from "./routes/kehadiran";
 import RiwayatAbsen from "./routes/riwayatabsen";
 import Ranking from "./routes/ranking";
 import Home from "./routes/Home";
+import AbsenManual from "./routes/absenManual";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
   {
     path: "/ranking",
     element: <Ranking />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/absenmanual",
+    element: <AbsenManual />,
     errorElement: <ErrorPage />,
   },
 ]);

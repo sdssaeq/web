@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "sync": "aws s3 sync ./dist/ s3://absensi.dprdbekasi.cloud/ ",
+    "inva": "aws cloudfront create-invalidation --distribution-id E28V79YLOOMNYB  --paths /* ",
+    "delete": "aws s3 rm s3://absensi.dprdbekasi.cloud/ --recursive",
+    "deploy": "npm run build && npm run delete && npm run sync && npm run inva",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -14,12 +18,14 @@
     "axios": "^1.6.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-html5-camera-photo": "^1.5.11",
     "react-pro-sidebar": "^1.1.0",
     "realm-web": "^2.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/react-html5-camera-photo": "^1.5.3",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",

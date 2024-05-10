@@ -204,37 +204,41 @@ export default function RiwayatAbsen() {
   return (
     <>
       <Side>
-        <div className="max-md:text-xs text-base pb-12 flex flex-col justify-center h-full">
+        <div className="max-md:text-xs text-base pb-12 xl:pt-0 pt-24 max-md:pt-0 max-md:pr-4 flex flex-col justify-center h-full">
           <div className="max-md:w-[90dvw] w-[100dvw] max-md:h-[80dvh] max-lg:h-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 overflow-y-scroll">
             <header className="px-5 py-4 border-b border-gray-100">
               <h2 className="font-semibold text-gray-800">Riwayat</h2>
             </header>
             <div className="p-3">
-              <div className="flex items-center justify-end space-x-4 mb-4">
+              <div className="flex items-center justify-end space-x-4 max-md:space-x-1 mb-4">
                 <input
+                  className="w-full h-7 border-2 border-gray-300 focus:border-blue-500 focus:outline-none rounded-lg"
                   type="date"
                   onChange={(e) => handleDateClick(new Date(e.target.value))}
                 />
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="h-12 w-24 px-4 py-2 max-md:w-18 max-md:px-1 max-md:py-0 max-md:h-8 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   onClick={handleSearch}
                 >
-                  <div className="flex flex-row gap-2">
-                    Tanggal <span>{<RiSearch2Line />}</span>
+                  <div className="flex flex-row gap-1 items-center justify-center">
+                    <p>Tanggal</p>
+                    <span>{<RiSearch2Line size={12} />}</span>
                   </div>
                 </button>
                 <input
+                  className="max-md:w-16 h-7 p-1 border-2 border-gray-300 focus:border-blue-500 focus:outline-none rounded-lg"
                   type="text"
-                  placeholder="Cari Nama"
+                  placeholder="Nama"
                   value={searchName}
                   onChange={(e) => setSearchName(e.target.value)}
                 />
                 <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="h-12 w-24 px-4 py-2 max-md:w-16 max-md:px-1 max-md:py-0 max-md:h-8 bg-blue-500 text-white rounded-md hover:bg-blue-600"
                   onClick={handleNameSearch}
                 >
-                  <div className="flex flex-row gap-2">
-                    Nama <span>{<RiSearch2Line />}</span>
+                  <div className="flex flex-row gap-1 items-center justify-center">
+                    <p>Nama</p>
+                    <span>{<RiSearch2Line size={12} />}</span>
                   </div>
                 </button>
               </div>

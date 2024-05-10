@@ -29,7 +29,7 @@ export default function Kehadiran() {
   return (
     <>
       <Side>
-        <div className="max-md:text-xs pb-48 flex flex-col justify-center h-full">
+        <div className="max-md:text-xs text-base pb-48 flex flex-col justify-center h-full">
           <div className="max-md:w-[80dvw] w-full max-w-2xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200">
             <header className="px-5 py-4 border-b border-gray-100">
               <h2 className="font-semibold text-gray-800">Kehadiran</h2>
@@ -43,12 +43,12 @@ export default function Kehadiran() {
                         <div className="font-semibold text-left">Name</div>
                       </th>
                       <th className="p-2 whitespace-nowrap">
+                        <div className="font-semibold text-left">Hadir</div>
+                      </th>
+                      <th className="p-2 whitespace-nowrap">
                         <div className="font-semibold text-left">
                           Tidak Hadir
                         </div>
-                      </th>
-                      <th className="p-2 whitespace-nowrap">
-                        <div className="font-semibold text-left">Hadir</div>
                       </th>
                     </tr>
                   </thead>
@@ -62,13 +62,13 @@ export default function Kehadiran() {
                             </div>
                           </div>
                         </td>
-                        <td className="p-2 whitespace-nowrap text-red-500">
-                          <div className="text-left">{record.tdk_hadir}</div>
-                        </td>
                         <td className="p-2 whitespace-nowrap">
                           <div className="text-left font-medium text-green-500">
                             {record.hadir}
                           </div>
+                        </td>
+                        <td className="p-2 whitespace-nowrap text-red-500">
+                          <div className="text-left">{record.tdk_hadir}</div>
                         </td>
                       </tr>
                     ))}

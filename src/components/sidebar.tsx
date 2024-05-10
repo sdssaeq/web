@@ -8,6 +8,7 @@ import {
   RiHistoryLine,
   RiUserLine,
   RiHome2Line,
+  RiPhoneCameraLine,
 } from "@remixicon/react";
 import { Link } from "react-router-dom";
 import { ReactNode, useState } from "react";
@@ -56,6 +57,13 @@ export default function Side({ children }: SideProps) {
             >
               {" "}
               Ranking{" "}
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/absenmanual" />}
+              icon={<RiPhoneCameraLine />}
+            >
+              {" "}
+              Absen Now{" "}
             </MenuItem>
           </Menu>
         </Sidebar>
