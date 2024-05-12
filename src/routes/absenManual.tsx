@@ -7,6 +7,7 @@ import { RiRefreshLine } from "@remixicon/react";
 export default function AbsenManual() {
   const [image, setImage] = useState<string | null>(null);
   const [dataRequest, setDataRequest] = useState<any>(null);
+  // const [isReset, setisReset] = useState(false);
   const [facingMode, setFacingMode] = useState<"environment" | "user">(
     "environment"
   );
@@ -17,7 +18,8 @@ export default function AbsenManual() {
   };
 
   const takeAnotherPhoto = () => {
-    setImage(null); // Resetting the image state to allow taking another photo
+    setImage(null);
+    setDataRequest(null);
   };
 
   const handleTakePhoto = (dataUri: string) => {
@@ -85,7 +87,7 @@ export default function AbsenManual() {
             </div>
             {dataRequest && dataRequest[0] == "Tidak Terbaca" ? (
               <div className="pt-8 pb-2">
-                <p className="text-xl">Gambar Tidak Ada Wajah</p>
+                <p className="text-xl">Wajah Tidak Terdekteksi</p>
               </div>
             ) : (
               <div></div>
@@ -102,7 +104,7 @@ export default function AbsenManual() {
               dataRequest &&
               dataRequest[0] === "ANOMALI" && (
                 <div className="pt-8 pb-2">
-                  <p className="text-xl">Wajah Tidak Terdekteksi</p>
+                  <p className="text-xl">Wajah Tidak Terdaftar</p>
                 </div>
               )
             )}

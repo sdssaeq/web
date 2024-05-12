@@ -9,6 +9,7 @@ import {
   RiUserLine,
   RiHome2Line,
   RiPhoneCameraLine,
+  RiUserAddLine,
 } from "@remixicon/react";
 import { Link } from "react-router-dom";
 import { ReactNode, useState } from "react";
@@ -64,6 +65,13 @@ export default function Side({ children }: SideProps) {
             >
               {" "}
               Absen Now{" "}
+            </MenuItem>
+            <MenuItem
+              component={<Link to="/tambahwajah" />}
+              icon={<RiUserAddLine />}
+            >
+              {" "}
+              Daftar{" "}
             </MenuItem>
           </Menu>
         </Sidebar>

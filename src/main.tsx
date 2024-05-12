@@ -8,6 +8,7 @@ import RiwayatAbsen from "./routes/riwayatabsen";
 import Ranking from "./routes/ranking";
 import Home from "./routes/Home";
 import AbsenManual from "./routes/absenManual";
+import Tambahwajah from "./routes/tambahwajah";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
   {
     path: "/absenmanual",
     element: <AbsenManual />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/tambahwajah",
+    element: <Tambahwajah />,
     errorElement: <ErrorPage />,
   },
 ]);
