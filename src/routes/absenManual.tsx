@@ -57,7 +57,7 @@ export default function AbsenManual() {
         <div className="pt-16 lg:pt-0 max-md:text-xs text-base gap-10">
           <div className="flex flex-col items-center justify-between rounded-lg border border-gray-200 p-4 mr-6">
             <h1 className="font-bold mb-4">Absen Manual</h1>
-            <div className="w-[50dvh] lg:h-[40dvh]">
+            <div className="w-[50dvh] lg:w-[40dvh]">
               {image ? (
                 <img src={image} alt="Uploaded" />
               ) : (
