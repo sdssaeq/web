@@ -3,14 +3,7 @@ import Side from "../components/sidebar";
 import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import axios from "axios";
-// import * as Realm from "realm-web";
-
-// const APP_ID = "data-wzvck";
-// const app = new Realm.App({ id: APP_ID });
-// const credentials = Realm.Credentials.apiKey(
-//   "r7WRET3thOH7CXWdLzJCnxyPvYznPZFrbjZeN1PW2QPfzcbLIL3RXXFlbP3mM0eO"
-// );
-
+import { RiRefreshLine } from "@remixicon/react";
 export default function AbsenManual() {
   const [image, setImage] = useState<string | null>(null);
   const [dataRequest, setDataRequest] = useState<any>(null);
@@ -21,6 +14,10 @@ export default function AbsenManual() {
   const toggleFacingMode = () => {
     const newFacingMode = facingMode === "environment" ? "user" : "environment";
     setFacingMode(newFacingMode);
+  };
+
+  const takeAnotherPhoto = () => {
+    setImage(null); // Resetting the image state to allow taking another photo
   };
 
   const handleTakePhoto = (dataUri: string) => {
@@ -64,19 +61,26 @@ export default function AbsenManual() {
                 <Camera
                   imageType="jpg"
                   idealFacingMode={facingMode}
-                  idealResolution={{ width: 480, height: 640 }}
+                  idealResolution={{ width: 640, height: 480 }}
                   isFullscreen={false}
                   isImageMirror={false}
                   onTakePhoto={(dataUri: string) => handleTakePhoto(dataUri)}
                 />
               )}
             </div>
-            <div className="pt-8 pb-2">
+            <div className="pt-8 pb-2 flex gap-10">
               <button
                 className="outline outline-1 rounded-lg outline-offset-8"
                 onClick={toggleFacingMode}
               >
                 <p>Ganti Kamera</p>
+              </button>
+
+              <button
+                className="outline outline-1 rounded-lg outline-offset-8"
+                onClick={takeAnotherPhoto}
+              >
+                <RiRefreshLine />
               </button>
             </div>
             {dataRequest && dataRequest[0] == "Tidak Terbaca" ? (
