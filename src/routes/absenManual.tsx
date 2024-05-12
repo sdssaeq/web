@@ -79,6 +79,13 @@ export default function AbsenManual() {
                 <p>Ganti Kamera</p>
               </button>
             </div>
+            {dataRequest && dataRequest[0] == "Tidak Terbaca" ? (
+              <div className="pt-8 pb-2">
+                <p className="text-xl">Gambar Tidak Ada Wajah</p>
+              </div>
+            ) : (
+              <div></div>
+            )}
             {dataRequest &&
             dataRequest[0] !== "ANOMALI" &&
             dataRequest[0] !== "Tidak Terbaca" ? (
