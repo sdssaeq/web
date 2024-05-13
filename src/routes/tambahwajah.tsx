@@ -4,11 +4,11 @@ import { RiFileUploadLine } from "@remixicon/react";
 
 export default function Tambahwajah(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [namaFile, setnamaFile] = useState<string | null>(null);
+  // const [namaFile, setnamaFile] = useState<string | null>(null);
 
-  const handleInputName = (event: ChangeEvent<HTMLInputElement>) => {
-    setnamaFile(event.target.value);
-  };
+  // const handleInputName = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setnamaFile(event.target.value);
+  // };
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -126,7 +126,7 @@ export default function Tambahwajah(): JSX.Element {
                   style={{ maxWidth: "100%", maxHeight: "100%" }}
                 />
               ) : (
-                <span className="text-gray-500">Drag & drop image here</span>
+                <span className="text-gray-500">Drag & drop</span>
               )}
             </div>
             <div className="rounded-lg p-4 flex flex-col gap-4 justify-center items-center">
@@ -150,7 +150,7 @@ export default function Tambahwajah(): JSX.Element {
                 className="p-2 rounded-xl text-center outline outline-1 outline-black focus:outline-2 focus:outline-blue-400"
                 type="text"
                 placeholder="Nama Peserta"
-                onChange={handleInputName}
+                // onChange={handleInputName}
               />
               <button
                 className="w-full h-full bg-green-200 p-2 rounded-xl"

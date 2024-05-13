@@ -18,6 +18,7 @@ interface RiwayatRecord {
 export default function RiwayatAbsen() {
   const [AbsenData, setAbsenData] = useState<RiwayatRecord[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [initialData, setInitialData] = useState<RiwayatRecord[]>([]);
   const [searchResult, setSearchResult] = useState<RiwayatRecord[]>([]);
   const [searchName, setSearchName] = useState<string>("");
 
@@ -28,8 +29,10 @@ export default function RiwayatAbsen() {
       const collection = await mongo.db("iot").collection("absensi");
       const findAll = await collection.find({});
       setAbsenData(findAll);
+      setInitialData(findAll);
     };
     login();
+    console.log(selectedDate, searchName, searchResult);
   }, []);
 
   const handleDateClick = (date: Date) => {
@@ -138,6 +141,64 @@ export default function RiwayatAbsen() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
+                    {searchName === "" &&
+                      selectedDate === null &&
+                      initialData.map((record, index) => (
+                        <tr key={index}>
+                          <td className="p-2 whitespace-nowrap">
+                            <img
+                              className="w-40"
+                              src={`data:image/webp;base64,${record.gambar}`}
+                              alt={record.nama}
+                            />
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="flex items-center">
+                              <div className="font-medium text-gray-800">
+                                {record.nama}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div
+                              className={`text-center ${
+                                isOnTime(record.tanggal)
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              <p>
+                                {isOnTime(record.tanggal)
+                                  ? "Tepat Waktu"
+                                  : "Telat"}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div
+                              className={`text-center ${
+                                isOnTime(record.tanggal)
+                                  ? "text-green-500"
+                                  : "text-red-500"
+                              }`}
+                            >
+                              <p>
+                                {new Date(record.tanggal).toLocaleTimeString(
+                                  "en-US",
+                                  { hour12: false }
+                                )}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="p-2 whitespace-nowrap">
+                            <div className="text-center">
+                              <p>
+                                {new Date(record.tanggal).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                     {selectedDate && searchResult.length === 0 ? (
                       <tr>
                         <td className="p-2 whitespace-nowrap">
