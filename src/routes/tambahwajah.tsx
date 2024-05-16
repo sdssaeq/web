@@ -39,7 +39,7 @@ export default function Tambahwajah(): JSX.Element {
 
   const uploadImage = async () => {
     setNetworkError(false);
-    if (!selectedImage || !namaFile || loading) return; // Prevent multiple clicks while uploading
+    if (!selectedImage || !namaFile || loading) return;
     setLoading(true); // Set loading state to true
     const formData = new FormData();
     formData.append("image", selectedImage);
@@ -47,7 +47,8 @@ export default function Tambahwajah(): JSX.Element {
 
     try {
       const res = await axios.post(
-        "https://api.dprdbekasi.cloud/tambahpeserta/",
+        // "https://api.dprdbekasi.cloud/tambahpeserta/",
+        "http://localhost:8080/tambahpeserta/",
         formData,
         {
           headers: {
@@ -68,14 +69,16 @@ export default function Tambahwajah(): JSX.Element {
     <>
       <Side>
         <div
-          className="h-[80dvh] mr-12 flex flex-col items-center justify-center"
+          className="h-[80dvh] mr-12 max-md:mt-16 max-md:ml-5 flex flex-col items-center justify-center"
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
         >
-          <h2 className="font-semibold text-gray-800">Tambah Peserta</h2>
+          <h2 className="font-semibold text-gray-800 p-2 rounded-lg shadow-xl bg-slate-50">
+            Tambah Peserta
+          </h2>
           <div className="w-[80dvw] flex max-md:flex-col gap-2 justify-center items-center p-4 rounded-lg shadow-xl bg-slate-50">
             <div
-              className="w-[300px] h-[300px] border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center"
+              className="w-[250px] h-[250px] border-dashed border-2 border-gray-400 rounded-lg flex justify-center items-center"
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDrop}
             >
