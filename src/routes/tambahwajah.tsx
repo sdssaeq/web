@@ -70,7 +70,7 @@ export default function Tambahwajah(): JSX.Element {
       formData.append("image", blob, namaFile + ".jpg");
 
       try {
-        const response = await axios.post(
+        const res = await axios.post(
           "https://api.dprdbekasi.cloud/tambahpeserta/",
           formData,
           {
@@ -79,7 +79,8 @@ export default function Tambahwajah(): JSX.Element {
             },
           }
         );
-        setresponse(response);
+        setresponse(res.data);
+        console.log(res.data);
       } catch (error) {
         console.error("Error uploading image:", error);
       }
@@ -129,7 +130,7 @@ export default function Tambahwajah(): JSX.Element {
               </div>
 
               <input
-                className="p-2 rounded-xl text-center outline outline-1 outline-black focus:outline-2 focus:outline-blue-400"
+                className="w-full h-full p-2 rounded-xl text-center outline outline-1 outline-black focus:outline-2 focus:outline-blue-400"
                 type="text"
                 placeholder="Nama Peserta"
                 onChange={handleInputName}
@@ -140,7 +141,13 @@ export default function Tambahwajah(): JSX.Element {
               >
                 <p>Upload</p>
               </button>
-              {response && <div>{response}</div>}
+              {response != null &&
+                response.message &&
+                response.message == "Image received and saved successfully" && (
+                  <div className="text-black">
+                    Wajah {namaFile} Telah Didaftarkan
+                  </div>
+                )}
             </div>
           </div>
         </div>
