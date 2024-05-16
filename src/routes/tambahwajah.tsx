@@ -1,14 +1,15 @@
 import { useState, ChangeEvent, DragEvent } from "react";
 import Side from "../components/sidebar";
 import { RiFileUploadLine } from "@remixicon/react";
+import axios from "axios";
 
 export default function Tambahwajah(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  // const [namaFile, setnamaFile] = useState<string | null>(null);
-
-  // const handleInputName = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setnamaFile(event.target.value);
-  // };
+  const [namaFile, setnamaFile] = useState<string | null>(null);
+  const [response, setresponse] = useState<any | null>(null);
+  const handleInputName = (event: ChangeEvent<HTMLInputElement>) => {
+    setnamaFile(event.target.value);
+  };
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -33,80 +34,61 @@ export default function Tambahwajah(): JSX.Element {
   };
 
   const uploadImage = async () => {
-    if (!selectedImage) return;
+    if (!selectedImage || !namaFile) return;
+    const formData = new FormData();
 
-    try {
-      const response = await fetch(
-        "https://api.dprdbekasi.cloud/tambahpeserta/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ image: selectedImage }),
-        }
-      );
+    const img = new Image();
+    img.src = selectedImage;
+    // Wait for the image to load
+    img.onload = async () => {
+      // Create a canvas element
+      const canvas = document.createElement("canvas");
 
-      if (response.ok) {
-        console.log("Image uploaded successfully");
-        // Optionally, reset the selectedImage state
-        setSelectedImage(null);
-      } else {
-        console.error("Failed to upload image:", response.statusText);
+      // Calculate new width and height for resizing (e.g., 50% reduction)
+      const newWidth = img.width * 0.5;
+      const newHeight = img.height * 0.5;
+
+      // Set canvas dimensions
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      // Get the 2d context of the canvas
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      // Draw the image onto the canvas with the new dimensions
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      // Convert the canvas content to a base64 encoded string
+      const resizedImage = canvas.toDataURL("image/jpeg");
+
+      const binaryString = atob(resizedImage.split(",")[1]);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
+      const blob = new Blob([bytes], { type: "image/jpeg" });
+      formData.append("image", blob, namaFile + ".jpg");
+
+      try {
+        const response = await axios.post(
+          "https://api.dprdbekasi.cloud/tambahpeserta/",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setresponse(response);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    };
   };
 
   return (
     <>
       <Side>
-        {/* <div className="h-[80dvh] mt-12 mr-12 ml-12 flex items-center justify-center">
-          <div className="w-[80dvw] flex gap-2 justify-center items-center p-4 rounded-lg shadow-xl bg-slate-50">
-            <div>
-              {selectedImage && (
-                <div>
-                  <img
-                    src={selectedImage}
-                    alt="Selected"
-                    style={{ maxWidth: "100%", maxHeight: "300px" }}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="rounded-lg p-4 flex flex-col gap-4 justify-center items-center">
-              <div className="flex justify-center items-center w-full h-full">
-                <label
-                  htmlFor="fileInput"
-                  className="relative cursor-pointer bg-blue-100 px-4 py-2 rounded-xl flex items-center w-full h-full text-center"
-                >
-                  <span>Masukan Gambar</span>
-                  <RiFile2Line className="m-auto"></RiFile2Line>
-                  <input
-                    type="file"
-                    id="fileInput"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    onChange={handleImageChange}
-                  />
-                </label>
-              </div>
-
-              <button
-                className="w-full h-full bg-blue-100 p-2 rounded-xl"
-                onClick={uploadImage}
-              >
-                <p>Upload</p>
-              </button>
-              <input
-                className="p-2 rounded-xl text-center outline outline-1 outline-black focus:outline-2 focus:outline-blue-400"
-                type="text"
-                placeholder="Nama Peserta"
-                onChange={handleInputName}
-              />
-            </div>
-          </div>
-        </div> */}
         <div
           className="h-[80dvh] mt-12 mr-12 flex flex-col items-center justify-center"
           onDragOver={(e) => e.preventDefault()}
@@ -150,7 +132,7 @@ export default function Tambahwajah(): JSX.Element {
                 className="p-2 rounded-xl text-center outline outline-1 outline-black focus:outline-2 focus:outline-blue-400"
                 type="text"
                 placeholder="Nama Peserta"
-                // onChange={handleInputName}
+                onChange={handleInputName}
               />
               <button
                 className="w-full h-full bg-green-200 p-2 rounded-xl"
@@ -158,6 +140,7 @@ export default function Tambahwajah(): JSX.Element {
               >
                 <p>Upload</p>
               </button>
+              {response && <div>{response}</div>}
             </div>
           </div>
         </div>
