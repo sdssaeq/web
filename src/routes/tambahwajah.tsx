@@ -90,7 +90,7 @@ export default function Tambahwajah(): JSX.Element {
     <>
       <Side>
         <div
-          className="h-[80dvh] mt-12 mr-12 flex flex-col items-center justify-center"
+          className="h-[80dvh] mr-12 flex flex-col items-center justify-center"
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
         >
