@@ -1,14 +1,17 @@
 import { useState, ChangeEvent, DragEvent } from "react";
 import Side from "../components/sidebar";
-import { RiFileUploadLine } from "@remixicon/react";
+import { RiImageLine, RiLoaderLine, RiUploadLine } from "@remixicon/react";
 import axios from "axios";
 
 export default function Tambahwajah(): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [namaFile, setnamaFile] = useState<string | null>(null);
-  const [response, setresponse] = useState<any | null>(null);
+  const [namaFile, setNamaFile] = useState<string | null>(null);
+  const [response, setResponse] = useState<any | null>(null);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [networkError, setNetworkError] = useState(false);
+
   const handleInputName = (event: ChangeEvent<HTMLInputElement>) => {
-    setnamaFile(event.target.value);
+    setNamaFile(event.target.value);
   };
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,70 +24,44 @@ export default function Tambahwajah(): JSX.Element {
       reader.readAsDataURL(file);
     }
   };
+
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0]; // Get the dropped file
+    const file = e.dataTransfer.files[0];
     if (file) {
-      const reader = new FileReader(); // Create a FileReader object
+      const reader = new FileReader();
       reader.onload = () => {
-        setSelectedImage(reader.result as string); // Set the selected image to the file content
+        setSelectedImage(reader.result as string);
       };
-      reader.readAsDataURL(file); // Read the file as a Data URL
+      reader.readAsDataURL(file);
     }
   };
 
   const uploadImage = async () => {
-    if (!selectedImage || !namaFile) return;
+    setNetworkError(false);
+    if (!selectedImage || !namaFile || loading) return; // Prevent multiple clicks while uploading
+    setLoading(true); // Set loading state to true
     const formData = new FormData();
+    formData.append("image", selectedImage);
+    formData.append("namaFile", namaFile);
 
-    const img = new Image();
-    img.src = selectedImage;
-    // Wait for the image to load
-    img.onload = async () => {
-      // Create a canvas element
-      const canvas = document.createElement("canvas");
-
-      // Calculate new width and height for resizing (e.g., 50% reduction)
-      const newWidth = img.width * 0.5;
-      const newHeight = img.height * 0.5;
-
-      // Set canvas dimensions
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-
-      // Get the 2d context of the canvas
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      // Draw the image onto the canvas with the new dimensions
-      ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-      // Convert the canvas content to a base64 encoded string
-      const resizedImage = canvas.toDataURL("image/jpeg");
-
-      const binaryString = atob(resizedImage.split(",")[1]);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      const blob = new Blob([bytes], { type: "image/jpeg" });
-      formData.append("image", blob, namaFile + ".jpg");
-
-      try {
-        const res = await axios.post(
-          "https://api.dprdbekasi.cloud/tambahpeserta/",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        setresponse(res.data);
-        console.log(res.data);
-      } catch (error) {
-        console.error("Error uploading image:", error);
-      }
-    };
+    try {
+      const res = await axios.post(
+        "https://api.dprdbekasi.cloud/tambahpeserta/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setResponse(res.data);
+    } catch (error) {
+      setNetworkError(true);
+      console.error("Error uploading image:", error);
+    } finally {
+      setLoading(false); // Reset loading state
+    }
   };
 
   return (
@@ -116,10 +93,10 @@ export default function Tambahwajah(): JSX.Element {
               <div className="flex justify-center items-center w-full h-full">
                 <label
                   htmlFor="fileInput"
-                  className="relative cursor-pointer bg-blue-100 px-4 py-2 rounded-xl flex items-center w-full h-full text-center"
+                  className="relative cursor-pointer bg-blue-100 px-4 py-2 rounded-xl flex flex-col items-center justify-between w-full h-full text-center"
                 >
                   <span>Masukan Gambar</span>
-                  <RiFileUploadLine className="m-auto"></RiFileUploadLine>
+                  <RiImageLine className=""></RiImageLine>
                   <input
                     type="file"
                     id="fileInput"
@@ -136,11 +113,29 @@ export default function Tambahwajah(): JSX.Element {
                 onChange={handleInputName}
               />
               <button
-                className="w-full h-full bg-green-200 p-2 rounded-xl"
+                className={`w-full h-full p-2 rounded-xl ${
+                  loading ? "bg-red-200" : "bg-green-200"
+                }`}
                 onClick={uploadImage}
+                disabled={loading} // Disable button when loading
               >
-                <p>Upload</p>
+                {loading ? (
+                  <div className="flex justify-center items-center">
+                    <span>Loading...</span>
+                    <RiLoaderLine className="animate-spin" />
+                  </div>
+                ) : (
+                  <div className="flex items-center flex-col justify-between p-2">
+                    <p>Upload</p>
+                    <RiUploadLine className=""></RiUploadLine>
+                  </div>
+                )}
               </button>
+              {networkError && (
+                <div className="text-red-500 w-full h-full">
+                  Jaringan Bermasalah Silahkan Ulangi Lagi
+                </div>
+              )}
               {response != null &&
                 response.message &&
                 response.message == "Image received and saved successfully" && (

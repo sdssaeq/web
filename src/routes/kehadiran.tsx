@@ -21,7 +21,6 @@ export default function Kehadiran() {
       const mongo = await user.mongoClient("Cluster0");
       const collection = await mongo.db("iot").collection("kehadiran");
       const findKehadiran = await collection.find({});
-      // console.log(findKehadiran);
       setKehadiranData(findKehadiran);
     };
     login();
