@@ -32,7 +32,6 @@ export default function RiwayatAbsen() {
       setInitialData(findAll);
     };
     login();
-    console.log(selectedDate, searchName, searchResult);
   }, []);
 
   const handleDateClick = (date: Date) => {
@@ -56,7 +55,6 @@ export default function RiwayatAbsen() {
   const handleNameSearch = () => {
     if (searchName) {
       const result = AbsenData.filter((record) => {
-        // Check if the name matches at least three characters
         const matchCount = record.nama
           .toLowerCase()
           .split("")

@@ -44,7 +44,7 @@ export default function Ranking() {
               <h2 className="font-semibold text-gray-800">Ranking</h2>
             </header>
 
-            <div className="p-3">
+            <div className="h-[50dvh] p-3 overflow-y-auto">
               <div className="overflow-x-auto">
                 <table className="table-auto w-full">
                   <thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50">
