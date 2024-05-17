@@ -31,7 +31,8 @@ export default function Tambahwajah(): JSX.Element {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setSelectedImage(reader.result as string);
+        const base64String = reader.result as string;
+        setSelectedImage(base64String);
       };
       reader.readAsDataURL(file);
     }
@@ -48,6 +49,7 @@ export default function Tambahwajah(): JSX.Element {
     try {
       const res = await axios.post(
         "https://api.dprdbekasi.cloud/tambahpeserta/",
+        // "http://localhost:8080/tambahpeserta/",
         formData,
         {
           headers: {
