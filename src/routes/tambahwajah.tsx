@@ -47,8 +47,7 @@ export default function Tambahwajah(): JSX.Element {
 
     try {
       const res = await axios.post(
-        // "https://api.dprdbekasi.cloud/tambahpeserta/",
-        "http://localhost:8080/tambahpeserta/",
+        "https://api.dprdbekasi.cloud/tambahpeserta/",
         formData,
         {
           headers: {
