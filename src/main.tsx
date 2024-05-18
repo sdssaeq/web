@@ -9,6 +9,7 @@ import Ranking from "./routes/ranking";
 import Home from "./routes/Home";
 import AbsenManual from "./routes/absenManual";
 import Tambahwajah from "./routes/tambahwajah";
+import Login from "./routes/login";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,11 @@ const router = createBrowserRouter([
   {
     path: "/tambahwajah",
     element: <Tambahwajah />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
     errorElement: <ErrorPage />,
   },
 ]);
