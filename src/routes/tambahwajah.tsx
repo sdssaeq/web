@@ -140,13 +140,21 @@ export default function Tambahwajah(): JSX.Element {
                   Jaringan Bermasalah Silahkan Ulangi Lagi
                 </div>
               )}
-              {response != null &&
-                response.message &&
-                response.message == "Image received and saved successfully" && (
-                  <div className="text-black">
-                    Wajah {namaFile} Telah Didaftarkan
-                  </div>
-                )}
+              {response != null && response.message && (
+                <>
+                  {response.message === `${namaFile} Sudah Terdaftar` && (
+                    <div className="text-green-700">
+                      Wajah {namaFile} Sudah Terdaftar Di Database
+                    </div>
+                  )}
+                  {response.message ===
+                    "Image received and saved successfully" && (
+                    <div className="text-green-700">
+                      Wajah {namaFile} Telah Didaftarkan
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
