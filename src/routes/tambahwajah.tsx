@@ -14,80 +14,27 @@ export default function Tambahwajah(): JSX.Element {
     setNamaFile(event.target.value);
   };
 
-  const resizeAndCompressImage = (
-    base64String: string,
-    fileType: string
-  ): Promise<string> => {
-    const MAX_FILE_SIZE = 200 * 1024; // 200 KB in bytes
-    const TARGET_WIDTH = 800;
-    const TARGET_HEIGHT = 600;
-
-    return new Promise<string>((resolve) => {
-      const img = new Image();
-      img.src = base64String;
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        if (ctx) {
-          // Set canvas size to target dimensions
-          canvas.width = TARGET_WIDTH;
-          canvas.height = TARGET_HEIGHT;
-
-          // Draw the image on the canvas with the target dimensions
-          ctx.drawImage(img, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
-
-          // Function to compress the image iteratively until it's under the max file size
-          const compressImage = (
-            canvas: HTMLCanvasElement,
-            quality: number
-          ): Promise<Blob | null> => {
-            return new Promise((resolve) => {
-              canvas.toBlob(
-                (blob) => {
-                  if (blob && (blob.size <= MAX_FILE_SIZE || quality <= 0.1)) {
-                    resolve(blob);
-                  } else if (!blob) {
-                    resolve(null);
-                  } else {
-                    resolve(compressImage(canvas, quality - 0.05)); // Reduce quality by 0.05 and retry
-                  }
-                },
-                fileType,
-                quality
-              );
-            });
-          };
-
-          // Start compression at high quality
-          compressImage(canvas, 0.9).then((blob) => {
-            if (!blob) {
-              resolve(base64String);
-              return;
-            }
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              resolve(reader.result as string);
-            };
-            reader.readAsDataURL(blob);
-          });
-        } else {
-          // If ctx is null, resolve with the original base64 string
-          resolve(base64String);
-        }
-      };
-    });
-  };
+  const MAX_WIDTH = 800; // Set the maximum width of the image
+  const QUALITY = 0.8; // Set the quality level (0.0 to 1.0)
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result as string;
-        resizeAndCompressImage(base64String, file.type).then((resizedImage) => {
-          setSelectedImage(resizedImage);
-        });
+        const img = new Image();
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const scaleFactor = MAX_WIDTH / img.width;
+          const height = img.height * scaleFactor;
+          canvas.width = MAX_WIDTH;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, MAX_WIDTH, height);
+          const base64String = canvas.toDataURL("image/jpeg", QUALITY);
+          setSelectedImage(base64String);
+        };
       };
       reader.readAsDataURL(file);
     }
@@ -99,10 +46,19 @@ export default function Tambahwajah(): JSX.Element {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        const base64String = reader.result as string;
-        resizeAndCompressImage(base64String, file.type).then((resizedImage) => {
-          setSelectedImage(resizedImage);
-        });
+        const img = new Image();
+        img.src = reader.result as string;
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          const scaleFactor = MAX_WIDTH / img.width;
+          const height = img.height * scaleFactor;
+          canvas.width = MAX_WIDTH;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(img, 0, 0, MAX_WIDTH, height);
+          const base64String = canvas.toDataURL("image/jpeg", QUALITY);
+          setSelectedImage(base64String);
+        };
       };
       reader.readAsDataURL(file);
     }
