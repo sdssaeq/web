@@ -11,6 +11,8 @@ import {
   RiPhoneCameraLine,
   RiUserAddLine,
   RiUserUnfollowLine,
+  RiAdminLine,
+  RiUser4Line,
 } from "@remixicon/react";
 import { Link } from "react-router-dom";
 import { ReactNode, useState } from "react";
@@ -32,12 +34,15 @@ export default function Side({ children }: SideProps) {
           width="200px"
         >
           <Menu className="pt-2">
-            <SubMenu label="Peserta">
-              <MenuItem icon={<RiHome2Line />} component={<Link to="/" />}>
-                {" "}
-                Home
-              </MenuItem>
-
+            <MenuItem icon={<RiHome2Line />} component={<Link to="/" />}>
+              {" "}
+              Home
+            </MenuItem>
+            <SubMenu
+              icon={<RiUser4Line />}
+              rootStyles={{ textAlign: "left" }}
+              label="Peserta"
+            >
               <MenuItem
                 component={<Link to="/kehadiran" />}
                 icon={<RiUserLine />}
@@ -70,7 +75,11 @@ export default function Side({ children }: SideProps) {
                 Absen Now{" "}
               </MenuItem>
             </SubMenu>
-            <SubMenu label="Admin">
+            <SubMenu
+              icon={<RiAdminLine />}
+              rootStyles={{ textAlign: "left" }}
+              label="Admin"
+            >
               <MenuItem
                 component={<Link to="/tambahwajah" />}
                 icon={<RiUserAddLine />}
