@@ -59,7 +59,8 @@ export default function Login(): JSX.Element {
     formData.append("password", formDataInput.password);
     // Send form data to the server
     axios
-      .post("http://localhost:8080/token/", formData)
+      // .post("http://localhost:8080/token/", formData)
+      .post("https://api.dprdbekasi.cloud/token/", formData)
       .then((response) => {
         // console.log(response.data);
         setresponseMessage(response.data);

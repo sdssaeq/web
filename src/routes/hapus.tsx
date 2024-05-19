@@ -39,7 +39,8 @@ export default function Hapuswajah() {
   const handleButtonClick = async () => {
     try {
       const data = { nama: selectedRecord };
-      await axios.post("http://localhost:8080/hapuspeserta/", data);
+      //   await axios.post("http://localhost:8080/hapuspeserta/", data);
+      await axios.post("https://api.dprdbekasi.cloud/hapuspeserta/", data);
       const user = await app.logIn(credentials);
       const mongo = await user.mongoClient("Cluster0");
       const collection = await mongo.db("iot").collection("kehadiran");
