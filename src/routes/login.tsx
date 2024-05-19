@@ -1,8 +1,8 @@
 import axios from "axios";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import {
-  // RiCheckLine,
-  // RiErrorWarningLine,
+  RiCheckLine,
+  RiErrorWarningLine,
   RiEyeCloseFill,
   RiEyeFill,
   RiLoaderLine,
@@ -10,15 +10,42 @@ import {
 import Side from "../components/sidebar";
 import { Navigate } from "react-router-dom";
 
-export default function Login() {
-  // const navigate = useNavigate();
+export default function Login(): JSX.Element {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+  const [responseMessage, setresponseMessage] = useState<any>();
+  const [errMsg, seterrMsg] = useState<any>();
+
+  useEffect(() => {
+    async function CheckLogin() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.get("http://localhost:8080/protected/", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (response.data.message === "You are authenticated") {
+            setIsAuth(true);
+          } else {
+            setIsAuth(false);
+          }
+        } catch (error) {
+          console.error("Error accessing protected route:", error);
+          setIsAuth(false);
+        }
+      } else {
+        setIsAuth(false);
+      }
+    }
+    CheckLogin();
+  }, []);
+
   const [formDataInput, setFormDataInput] = useState({
     username: "",
     password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -35,19 +62,19 @@ export default function Login() {
       .post("http://localhost:8080/token/", formData)
       .then((response) => {
         // console.log(response.data);
+        setresponseMessage(response.data);
         const token = response.data.access_token;
         localStorage.setItem("token", token);
-        console.log(token);
         setIsAuth(true);
         // Handle successful login response
       })
       .catch((error) => {
         setIsAuth(false);
+        seterrMsg(error.response.data);
         console.error("Error logging in:", error);
       })
       .finally(() => {
         setIsLoading(false);
-        // navigate("/tambahwajah");
       });
   };
 
@@ -56,6 +83,7 @@ export default function Login() {
     const { name, value } = e.target;
     setFormDataInput({ ...formDataInput, [name]: value });
   };
+
   return !isAuth ? (
     <>
       <Side>
@@ -135,6 +163,24 @@ export default function Login() {
                     )}
                   </button>
                 </div>
+                <div className="pt-12 w-full flex items-center justify-center">
+                  {errMsg?.detail && (
+                    <div className="w-full flex flex-col item-center justify-center text-base outline outline-red-500 outline-1 bg-red-100  px-4 py-2 rounded-md">
+                      <RiErrorWarningLine className="self-center" color="red" />
+                      <p className="text-center text-red-500">
+                        {errMsg.detail}
+                      </p>
+                    </div>
+                  )}
+                  {responseMessage?.response && (
+                    <div className="w-full flex flex-col item-center justify-center text-base outline outline-green-300 outline-1 bg-green-100 px-4 py-2 rounded-md">
+                      <RiCheckLine className="self-center" color="green" />
+                      <p className="text-center text-green-500">
+                        {responseMessage.response}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </form>
             </div>
           </div>
@@ -142,25 +188,6 @@ export default function Login() {
       </Side>
     </>
   ) : (
-    <Navigate to="/tambahwajah" />
+    <Navigate to="/" />
   );
-}
-
-{
-  /* <div className="pt-12 w-full flex items-center justify-center">
-            {response?.error && (
-              <div className="w-full flex flex-col item-center justify-center text-base outline outline-red-500 outline-1 bg-red-100  px-4 py-2 rounded-md">
-                <RiErrorWarningLine className="self-center" color="red" />
-                <p className="text-center text-red-500">{response.error}</p>
-              </div>
-            )}
-            {response?.response && (
-              <div className="w-full flex flex-col item-center justify-center text-base outline outline-green-300 outline-1 bg-green-100 px-4 py-2 rounded-md">
-                <RiCheckLine className="self-center" color="green" />
-                <p className="text-center text-green-500">
-                  {response.response}
-                </p>
-              </div>
-            )}
-          </div> */
 }

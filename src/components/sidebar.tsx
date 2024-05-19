@@ -1,6 +1,6 @@
 import "../index.css";
 
-import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import {
   RiArrowLeftCircleLine,
   RiMenu5Line,
@@ -10,6 +10,7 @@ import {
   RiHome2Line,
   RiPhoneCameraLine,
   RiUserAddLine,
+  RiUserUnfollowLine,
 } from "@remixicon/react";
 import { Link } from "react-router-dom";
 import { ReactNode, useState } from "react";
@@ -27,52 +28,64 @@ export default function Side({ children }: SideProps) {
         <Sidebar
           collapsed={first}
           collapsedWidth="0px"
-          rtl={true}
-          width="180px"
+          rtl={false}
+          width="200px"
         >
           <Menu className="pt-2">
-            <MenuItem icon={<RiHome2Line />} component={<Link to="/" />}>
-              {" "}
-              Home
-            </MenuItem>
+            <SubMenu label="Peserta">
+              <MenuItem icon={<RiHome2Line />} component={<Link to="/" />}>
+                {" "}
+                Home
+              </MenuItem>
 
-            <MenuItem
-              component={<Link to="/kehadiran" />}
-              icon={<RiUserLine />}
-            >
-              {" "}
-              Kehadiran{" "}
-            </MenuItem>
+              <MenuItem
+                component={<Link to="/kehadiran" />}
+                icon={<RiUserLine />}
+              >
+                {" "}
+                Kehadiran{" "}
+              </MenuItem>
 
-            <MenuItem
-              component={<Link to="/riwayat" />}
-              icon={<RiHistoryLine />}
-            >
-              {" "}
-              Riwayat{" "}
-            </MenuItem>
+              <MenuItem
+                component={<Link to="/riwayat" />}
+                icon={<RiHistoryLine />}
+              >
+                {" "}
+                Riwayat{" "}
+              </MenuItem>
 
-            <MenuItem
-              component={<Link to="/ranking" />}
-              icon={<RiTrophyLine />}
-            >
-              {" "}
-              Ranking{" "}
-            </MenuItem>
-            <MenuItem
-              component={<Link to="/absenmanual" />}
-              icon={<RiPhoneCameraLine />}
-            >
-              {" "}
-              Absen Now{" "}
-            </MenuItem>
-            <MenuItem
-              component={<Link to="/tambahwajah" />}
-              icon={<RiUserAddLine />}
-            >
-              {" "}
-              Daftar{" "}
-            </MenuItem>
+              <MenuItem
+                component={<Link to="/ranking" />}
+                icon={<RiTrophyLine />}
+              >
+                {" "}
+                Ranking{" "}
+              </MenuItem>
+
+              <MenuItem
+                component={<Link to="/absenmanual" />}
+                icon={<RiPhoneCameraLine />}
+              >
+                {" "}
+                Absen Now{" "}
+              </MenuItem>
+            </SubMenu>
+            <SubMenu label="Admin">
+              <MenuItem
+                component={<Link to="/tambahwajah" />}
+                icon={<RiUserAddLine />}
+              >
+                {" "}
+                Daftar{" "}
+              </MenuItem>
+              <MenuItem
+                component={<Link to="/hapuswajah" />}
+                icon={<RiUserUnfollowLine />}
+              >
+                {" "}
+                Hapus{" "}
+              </MenuItem>
+            </SubMenu>
           </Menu>
         </Sidebar>
         <div className="pt-2 absolute right-2">

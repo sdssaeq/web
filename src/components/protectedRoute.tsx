@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import axios from "axios";
+import { RiLoaderLine } from "@remixicon/react";
 
 interface ProtectedRouteProps {
-  element: React.ReactNode;
+  children: React.ReactNode;
 }
 
-function ProtectedRoute({ element }: ProtectedRouteProps) {
+function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -38,10 +39,14 @@ function ProtectedRoute({ element }: ProtectedRouteProps) {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-dvh h-dvh flex items-center justify-center animate-spin">
+        {<RiLoaderLine size={100} />}
+      </div>
+    );
   }
 
-  return authenticated ? element : <Navigate to="/login" />;
+  return authenticated ? children : <Navigate to="/login" />;
 }
 
 export default ProtectedRoute;

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error-page";
 import Kehadiran from "./routes/kehadiran";
 import RiwayatAbsen from "./routes/riwayatabsen";
@@ -11,45 +11,37 @@ import AbsenManual from "./routes/absenManual";
 import Tambahwajah from "./routes/tambahwajah";
 import Login from "./routes/login";
 import ProtectedRoute from "./components/protectedRoute";
-
-// async function ProtectedRoute({ element }: ProtectedRouteProps) {
-//   return (await checkAuthentication()) ? element : <Navigate to="/login" />;}
+import Hapuswajah from "./routes/hapus";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Outlet />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "/kehadiran",
-    element: <Kehadiran />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/riwayat",
-    element: <RiwayatAbsen />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/ranking",
-    element: <Ranking />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/absenmanual",
-    element: <AbsenManual />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/tambahwajah",
-    element: <ProtectedRoute element={<Tambahwajah />} />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    errorElement: <ErrorPage />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/kehadiran", element: <Kehadiran /> },
+      { path: "/riwayat", element: <RiwayatAbsen /> },
+      { path: "/ranking", element: <Ranking /> },
+      { path: "/absenmanual", element: <AbsenManual /> },
+      {
+        path: "/tambahwajah",
+        element: (
+          <ProtectedRoute>
+            <Tambahwajah />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/hapuswajah",
+        element: (
+          <ProtectedRoute>
+            <Hapuswajah />
+          </ProtectedRoute>
+        ),
+      },
+      { path: "/login", element: <Login /> },
+    ],
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")!).render(
