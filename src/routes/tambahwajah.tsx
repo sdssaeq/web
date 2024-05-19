@@ -14,12 +14,80 @@ export default function Tambahwajah(): JSX.Element {
     setNamaFile(event.target.value);
   };
 
+  const resizeAndCompressImage = (
+    base64String: string,
+    fileType: string
+  ): Promise<string> => {
+    const MAX_FILE_SIZE = 200 * 1024; // 200 KB in bytes
+    const TARGET_WIDTH = 800;
+    const TARGET_HEIGHT = 600;
+
+    return new Promise<string>((resolve) => {
+      const img = new Image();
+      img.src = base64String;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        if (ctx) {
+          // Set canvas size to target dimensions
+          canvas.width = TARGET_WIDTH;
+          canvas.height = TARGET_HEIGHT;
+
+          // Draw the image on the canvas with the target dimensions
+          ctx.drawImage(img, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+
+          // Function to compress the image iteratively until it's under the max file size
+          const compressImage = (
+            canvas: HTMLCanvasElement,
+            quality: number
+          ): Promise<Blob | null> => {
+            return new Promise((resolve) => {
+              canvas.toBlob(
+                (blob) => {
+                  if (blob && (blob.size <= MAX_FILE_SIZE || quality <= 0.1)) {
+                    resolve(blob);
+                  } else if (!blob) {
+                    resolve(null);
+                  } else {
+                    resolve(compressImage(canvas, quality - 0.05)); // Reduce quality by 0.05 and retry
+                  }
+                },
+                fileType,
+                quality
+              );
+            });
+          };
+
+          // Start compression at high quality
+          compressImage(canvas, 0.9).then((blob) => {
+            if (!blob) {
+              resolve(base64String);
+              return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              resolve(reader.result as string);
+            };
+            reader.readAsDataURL(blob);
+          });
+        } else {
+          // If ctx is null, resolve with the original base64 string
+          resolve(base64String);
+        }
+      };
+    });
+  };
+
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setSelectedImage(reader.result as string);
+        const base64String = reader.result as string;
+        resizeAndCompressImage(base64String, file.type).then((resizedImage) => {
+          setSelectedImage(resizedImage);
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -32,7 +100,9 @@ export default function Tambahwajah(): JSX.Element {
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result as string;
-        setSelectedImage(base64String);
+        resizeAndCompressImage(base64String, file.type).then((resizedImage) => {
+          setSelectedImage(resizedImage);
+        });
       };
       reader.readAsDataURL(file);
     }

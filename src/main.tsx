@@ -10,6 +10,10 @@ import Home from "./routes/Home";
 import AbsenManual from "./routes/absenManual";
 import Tambahwajah from "./routes/tambahwajah";
 import Login from "./routes/login";
+import ProtectedRoute from "./components/protectedRoute";
+
+// async function ProtectedRoute({ element }: ProtectedRouteProps) {
+//   return (await checkAuthentication()) ? element : <Navigate to="/login" />;}
 
 const router = createBrowserRouter([
   {
@@ -39,7 +43,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/tambahwajah",
-    element: <Tambahwajah />,
+    element: <ProtectedRoute element={<Tambahwajah />} />,
     errorElement: <ErrorPage />,
   },
   {
