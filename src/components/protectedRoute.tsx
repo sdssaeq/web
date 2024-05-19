@@ -16,9 +16,13 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const response = await axios.get("http://localhost:8080/protected/", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await axios.get(
+            // "http://localhost:8080/protected/",
+            "https://api.dprdbekasi.cloud/protected/",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
 
           if (response.data.message === "You are authenticated") {
             setAuthenticated(true);

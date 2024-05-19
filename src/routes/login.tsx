@@ -23,8 +23,8 @@ export default function Login(): JSX.Element {
       if (token) {
         try {
           const response = await axios.get(
-            // "http://localhost:8080/token/",
-            "https://api.dprdbekasi.cloud/token/",
+            // "http://localhost:8080/protected/",
+            "https://api.dprdbekasi.cloud/protected/",
             {
               headers: { Authorization: `Bearer ${token}` },
             }
