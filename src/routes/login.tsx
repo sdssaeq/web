@@ -22,9 +22,13 @@ export default function Login(): JSX.Element {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          const response = await axios.get("http://localhost:8080/protected/", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await axios.get(
+            // "http://localhost:8080/token/",
+            "https://api.dprdbekasi.cloud/token/",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
 
           if (response.data.message === "You are authenticated") {
             setIsAuth(true);

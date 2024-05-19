@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 import { RiLoaderLine } from "@remixicon/react";
 
